@@ -10,6 +10,7 @@ CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
 ME_URL = reverse('user:me')
 
+
 def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
@@ -65,10 +66,8 @@ class PublicUserApiTests(TestCase):
         create_user(**payload)
         res = self.client.post(TOKEN_URL, payload)
 
-
         self.assertIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
 
     def test_create_token_invalid_crential(self):
         """Test that a token is not created if invalid credentials are given"""
@@ -78,7 +77,6 @@ class PublicUserApiTests(TestCase):
 
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
 
     def test_create_token_no_user(self):
         """Test that a token is not created if user doesn't exist"""
@@ -94,7 +92,6 @@ class PublicUserApiTests(TestCase):
 
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
 
     def test_retrieve_user_unauthorized(self):
         """Test that authentication is required for users"""
@@ -130,7 +127,6 @@ class PrivateUserApiTests(TestCase):
         res = self.client.post(ME_URL, {})
 
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
 
     def test_update_user_profile(self):
         """Test updating the user profile for authenticated user"""
