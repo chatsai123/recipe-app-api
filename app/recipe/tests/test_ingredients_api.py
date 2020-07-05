@@ -4,11 +4,8 @@ from django.test import TestCase
 
 from rest_framework import status
 from rest_framework.test import APIClient
-
 from core.models import Ingredient
-
 from recipe.serializers import IngredientSerializer
-
 
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
@@ -66,3 +63,22 @@ class PrivateIngredientsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEquals(len(res.data), 1)
         self.assertEquals(res.data[0]['name'], ingredient.name)
+
+    def test_create_ingredient_successful(self):
+        """Test creatge a new ingredient"""
+        self.setup()
+        payload = {'name': 'Cabbage'}
+        self.client.post(INGREDIENTS_URL, payload)
+
+        exists = Ingredient.objects.filter(
+            user=self.user,
+            name=payload['name']
+        ).exists()
+        self.assertTrue(exists)
+
+    def test_create_ingredient_invalid(self):
+        """Test creating invalid ingredient failed"""
+        payload = {'name': ''}
+        res = self.client.post(INGREDIENTS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
