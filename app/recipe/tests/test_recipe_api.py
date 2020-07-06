@@ -121,11 +121,12 @@ class PrivateRecipeApiTests(TestCase):
         tag1 = sample_tag(user=self.user, name='Vegan')
         tag2 = sample_tag(user=self.user, name='Desert')
         payload = {
-            'title': 'Avocado Lime cheesecake',
+            'title': 'Test recipe with tags',
             'tags': [tag1.id, tag2.id],
             'time_minutes': 60,
             'price': 20.00
             }
+
         res = self.client.post(RECIPES_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -135,10 +136,11 @@ class PrivateRecipeApiTests(TestCase):
         self.assertIn(tag1, tags)
         self.assertIn(tag2, tags)
 
+
     def test_create_recipe_with_ingredients(self):
         """Test creating recipe with ingredients"""
-        ingredient1 = sample_ingredient(user=self.user, name='Ingredient 1')
-        ingredient2 = sample_ingredient(user=self.user, name='Ingredient 2')
+        ingredient1 = sample_ingredient(user=self.user, name='Prawns')
+        ingredient2 = sample_ingredient(user=self.user, name='Ginger')
         payload = {
             'title': 'Test recipe with ingredients',
             'ingredients': [ingredient1.id, ingredient2.id],
