@@ -4,8 +4,8 @@ from django.urls import reverse
 
 
 class AdminSiteTests(TestCase):
-    """setup run before every test case"""
-    def setup(self):
+    """setUp run before every test case"""
+    def setUp(self):
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
             email='admin@londonappdev.com',
@@ -20,7 +20,6 @@ class AdminSiteTests(TestCase):
 
     def test_users_listed(self):
         """Test that users are listed on user page"""
-        self.setup()
         url = reverse('admin:core_user_changelist')
         res = self.client.get(url)
 
@@ -29,7 +28,6 @@ class AdminSiteTests(TestCase):
 
     def test_user_page_change(self):
         """Test that the user edit page works"""
-        self.setup()
         url = reverse('admin:core_user_change', args=[self.user.id])
         res = self.client.get(url)
 
@@ -37,7 +35,6 @@ class AdminSiteTests(TestCase):
 
     def test_create_user_page(self):
         """Test that the create use page works"""
-        self.setup()
         url = reverse('admin:core_user_add')
         res = self.client.get(url)
 

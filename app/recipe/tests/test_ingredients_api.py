@@ -36,7 +36,6 @@ class PrivateIngredientsApiTests(TestCase):
 
     def test_retrieve_ingredient_list(self):
         """Test retrieving a list of ingredients,  """
-        ###self.setup()
         Ingredient.objects.create(user=self.user, name='kale')
         Ingredient.objects.create(user=self.user, name='Salt')
 
@@ -50,7 +49,6 @@ class PrivateIngredientsApiTests(TestCase):
     def test_ingredients_limited_to_user(self):
         """Test that ingredients for the authenticated user are return
             resolve Tumeric error """
-        ###self.setup()
         user2 = get_user_model().objects.create_user(
             'other@londonappdev',
             'testpass'
@@ -66,7 +64,6 @@ class PrivateIngredientsApiTests(TestCase):
 
     def test_create_ingredient_successful(self):
         """Test creatge a new ingredient"""
-        ###self.setup()
         payload = {'name': 'Cabbage'}
         self.client.post(INGREDIENTS_URL, payload)
 

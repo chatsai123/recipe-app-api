@@ -1,12 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import TestCase
-
 from rest_framework import status
 from rest_framework.test import APIClient
-
 from core.models import Recipe, Tag, Ingredient
-
 from recipe.serializers import RecipeSerializer, RecipDetailSerializer
 
 
@@ -66,7 +63,6 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_recipes_limited_to_user(self):
         """Test retrieving recipes for user"""
-        ###self.setUp()
         user2 = get_user_model().objects.create_user(
             'other@yahoo.com',
             'VeryGood6'
@@ -85,7 +81,6 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_retrieve_recipers(self):
         """Test retrieving a list of recipes"""
-        ###self.setUp()
         sample_recipe(user=self.user)
         sample_recipe(user=self.user)
 
@@ -98,23 +93,21 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_view_recipe_detail(self):
         """Test viewing a recipe detail,  """
-        ###self.setUp()
         recipe = sample_recipe(user=self.user)
         recipe.tags.add(sample_tag(user=self.user))
         recipe.ingredients.add(sample_ingredient(user=self.user))
 
         url = detail_url(recipe.id)
         res = self.client.get(url)
-
         serializer = RecipDetailSerializer(recipe)
         self.assertEqual(res.data, serializer.data)
 
     def test_create_basic_recipe(self):
         """Test creating recipe"""
         payload = {
-            'title': 'Test recipe',
+            'title': 'Chocolate cheesecake',
             'time_minutes': 30,
-            'price': 10.00,
+            'price': 5.00,
             }
         res = self.client.post(RECIPES_URL, payload)
 
@@ -125,14 +118,13 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_create_recipe_with_tags(self):
         """Test creating a recipe with tags"""
-
-        tag1 = sample_tag(user=self.user, name='Tag 1')
-        tag2 = sample_tag(user=self.user, name='Tag 2')
+        tag1 = sample_tag(user=self.user, name='Vegan')
+        tag2 = sample_tag(user=self.user, name='Desert')
         payload = {
-            'title': 'Test recipe with two tags',
+            'title': 'Avocado Lime cheesecake',
             'tags': [tag1.id, tag2.id],
-            'time_minutes': 30,
-            'price': 10.00
+            'time_minutes': 60,
+            'price': 20.00
             }
         res = self.client.post(RECIPES_URL, payload)
 
@@ -145,7 +137,6 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_create_recipe_with_ingredients(self):
         """Test creating recipe with ingredients"""
-        ###self.setUp()
         ingredient1 = sample_ingredient(user=self.user, name='Ingredient 1')
         ingredient2 = sample_ingredient(user=self.user, name='Ingredient 2')
         payload = {
@@ -166,7 +157,6 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_partial_update_recipe(self):
         """Test updating a recipe with patch"""
-        ###self.setUp()
         recipe = sample_recipe(user=self.user)
         recipe.tags.add(sample_tag(user=self.user))
         new_tag = sample_tag(user=self.user, name='Curry')
@@ -183,7 +173,6 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_full_update_recipe(self):
         """Test updating a recipe with put"""
-        ###self.setUp()
         recipe = sample_recipe(user=self.user)
         recipe.tags.add(sample_tag(user=self.user))
         payload = {

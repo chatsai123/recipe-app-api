@@ -40,7 +40,6 @@ class PrivateTagsApiTests(TestCase):
         """Test retrieving tags,
         PrivateTagsApiTests object has no attribute user
         """
-        ###self.setup()
         Tag.objects.create(user=self.user, name='Vegan')
         Tag.objects.create(user=self.user, name='Desert')
 
@@ -56,10 +55,9 @@ class PrivateTagsApiTests(TestCase):
         """Test that tags returned are for Authenticated user
         PrivateTagsApiTests object has no attribute user
         """
-        ###self.setup()
         user2 = get_user_model().objects.create_user(
-            'other@londonappdev',
-            'testpass'
+            'other@yahoo.com',
+            'VeryGood4'
         )
         Tag.objects.create(user=user2, name='Fruity')
         tag = Tag.objects.create(user=self.user, name='Comfort Food')
@@ -72,7 +70,6 @@ class PrivateTagsApiTests(TestCase):
 
     def test_create_tag_successful(self):
         """Test creating a new tag"""
-        ###self.setup()
         payload = {'name': 'Test tag'}
         self.client.post(TAGS_URL, payload)
 
