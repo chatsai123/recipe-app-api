@@ -15,7 +15,7 @@ TAGS_URL = reverse('recipe:tag-list')
 class PublicTagApiTests(TestCase):
     """Test the publicly available tags API"""
 
-    def setup(self):
+    def setUp(self):
         self.client = APIClient()
 
     def test_login_required(self):
@@ -28,20 +28,19 @@ class PublicTagApiTests(TestCase):
 class PrivateTagsApiTests(TestCase):
     """Test the authorized user tags API"""
 
-    def setup(self):
+    def setUp(self):
         self.user = get_user_model().objects.create_user(
-            'test@yahoo.com',
-            'password123'
+            'test4@yahoo.com',
+            'VeryGood4'
         )
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
     def test_retrieve_tags(self):
         """Test retrieving tags,
-        Added self.setup() to resolve
         PrivateTagsApiTests object has no attribute user
         """
-        self.setup()
+        ###self.setup()
         Tag.objects.create(user=self.user, name='Vegan')
         Tag.objects.create(user=self.user, name='Desert')
 
@@ -55,12 +54,11 @@ class PrivateTagsApiTests(TestCase):
 
     def test_tags_limited_to_user(self):
         """Test that tags returned are for Authenticated user
-        Added self.setup() to resolve
         PrivateTagsApiTests object has no attribute user
         """
-        self.setup()
+        ###self.setup()
         user2 = get_user_model().objects.create_user(
-            'other@yahoo.com',
+            'other@londonappdev',
             'testpass'
         )
         Tag.objects.create(user=user2, name='Fruity')
@@ -74,7 +72,7 @@ class PrivateTagsApiTests(TestCase):
 
     def test_create_tag_successful(self):
         """Test creating a new tag"""
-        self.setup()
+        ###self.setup()
         payload = {'name': 'Test tag'}
         self.client.post(TAGS_URL, payload)
 
@@ -89,4 +87,4 @@ class PrivateTagsApiTests(TestCase):
         payload = {'name': ''}
         res = self.client.post(TAGS_URL, payload)
 
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)

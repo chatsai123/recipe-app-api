@@ -18,15 +18,15 @@ def create_user(**params):
 class PublicUserApiTests(TestCase):
     """Test users API (public)"""
 
-    def setup(self):
+    def setUp(self):
         self.client = APIClient()
 
     def test_create_vaild_user_success(self):
         """Test creating user with valid payload is successful"""
         payload = {
-            'email': 'test@yahoo.com',
-            'password': 'test1',
-            'name': 'Test name'
+            'email': 'test4@yahoo.com',
+            'password': 'VeryGood4',
+            'name': 'test4'
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -38,9 +38,9 @@ class PublicUserApiTests(TestCase):
     def test_user_exists(self):
         """Test creation user that already exists failed"""
         payload = {
-            'email': 'test@yahoo.com',
-            'password': 'testpass',
-            'name': 'Test name'
+            'email': 'test4@yahoo.com',
+            'password': 'VeryGood4',
+            'name': 'test4'
             }
         create_user(**payload)
 
@@ -50,7 +50,7 @@ class PublicUserApiTests(TestCase):
 
     def test_password_too_short(self):
         """Test that the password must be more than 5 characters"""
-        payload = {'email': 'test@yahoo.com', 'password': 'testpass'}
+        payload = {'email': 'test@londonappdev', 'password': 'testpass'}
 
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -62,7 +62,7 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_for_user(self):
         """Test that a token is created for the user"""
-        payload = {'email': 'test@yahoo.com', 'password': 'testpass'}
+        payload = {'email': 'test4@yahoo.com', 'password': 'VeryGood4'}
         create_user(**payload)
         res = self.client.post(TOKEN_URL, payload)
 
@@ -71,8 +71,8 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_invalid_crential(self):
         """Test that a token is not created if invalid credentials are given"""
-        create_user(email='test@yahoo.com', password='testpass')
-        payload = {'email': 'test@yahoo.com', 'password': 'wrongpass'}
+        create_user(email='test4@yahoo.com', password='VeryGood4')
+        payload = {'email': 'test4@yahoo.com', 'password': 'VeryGood'}
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
@@ -80,7 +80,7 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_no_user(self):
         """Test that a token is not created if user doesn't exist"""
-        payload = {'email': 'test@yahoo.com', 'password': 'testpass'}
+        payload = {'email': 'test@londonappdev', 'password': 'testpass'}
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
@@ -105,9 +105,9 @@ class PrivateUserApiTests(TestCase):
 
     def setUp(self):
         self.user = create_user(
-            email='test3@yahoo.com',
-            password='VeryGood3',
-            name='test3'
+            email='test4@yahoo.com',
+            password='VeryGood4',
+            name='test4'
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)

@@ -13,7 +13,7 @@ INGREDIENTS_URL = reverse('recipe:ingredient-list')
 class PublicIngredientsApiTests(TestCase):
     """Test the publicly available ingredients API"""
 
-    def setup(self):
+    def setUp(self):
         self.client = APIClient()
 
     def test_login_required(self):
@@ -26,17 +26,17 @@ class PublicIngredientsApiTests(TestCase):
 class PrivateIngredientsApiTests(TestCase):
     """Test the private ingredients API"""
 
-    def setup(self):
+    def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
-            'test@yahoo.com',
-            'testpass'
+            'test4@yahoo.com',
+            'VeryGood4'
         )
         self.client.force_authenticate(self.user)
 
     def test_retrieve_ingredient_list(self):
-        """Test retrieving a list of ingredients, Added self.setup() """
-        self.setup()
+        """Test retrieving a list of ingredients,  """
+        ###self.setup()
         Ingredient.objects.create(user=self.user, name='kale')
         Ingredient.objects.create(user=self.user, name='Salt')
 
@@ -49,10 +49,10 @@ class PrivateIngredientsApiTests(TestCase):
 
     def test_ingredients_limited_to_user(self):
         """Test that ingredients for the authenticated user are return
-           Added self.setup() to resolve Tumeric error """
-        self.setup()
+            resolve Tumeric error """
+        ###self.setup()
         user2 = get_user_model().objects.create_user(
-            'other@yahoo.com',
+            'other@londonappdev',
             'testpass'
         )
         Ingredient.objects.create(user=user2, name='Vinegar')
@@ -66,7 +66,7 @@ class PrivateIngredientsApiTests(TestCase):
 
     def test_create_ingredient_successful(self):
         """Test creatge a new ingredient"""
-        self.setup()
+        ###self.setup()
         payload = {'name': 'Cabbage'}
         self.client.post(INGREDIENTS_URL, payload)
 
@@ -81,4 +81,4 @@ class PrivateIngredientsApiTests(TestCase):
         payload = {'name': ''}
         res = self.client.post(INGREDIENTS_URL, payload)
 
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
